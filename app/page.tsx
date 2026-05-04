@@ -178,7 +178,7 @@ const COLORS = {
 function AnimatedBg() {
   const canvasRef = useRef(null);
   useEffect(() => {
-    const c = canvasRef.current;
+    const c = canvasRef.current as HTMLCanvasElement;
     if (!c) return;
     const ctx = c.getContext("2d");
     let raf;
