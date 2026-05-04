@@ -176,12 +176,12 @@ const COLORS = {
 
 // Animated background with gradient mesh + floating particles
 function AnimatedBg() {
-  const canvasRef = useRef(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   useEffect(() => {
     const c = canvasRef.current as HTMLCanvasElement;
     if (!c) return;
     const ctx = c.getContext("2d");
-    let raf;
+    let raf: number;
     const particles = Array.from({ length: 35 }, () => ({
       x: Math.random() * 2000, y: Math.random() * 8000,
       vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
