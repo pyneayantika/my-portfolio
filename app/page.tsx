@@ -178,24 +178,33 @@ const COLORS = {
 function AnimatedBg() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   useEffect(() => {
-    const c = canvasRef.current as HTMLCanvasElement;
+    const c = canvasRef.current;
     if (!c) return;
     const ctx = c.getContext("2d");
+    if (!ctx) return;
     let raf: number;
-    const particles = Array.from({ length: 35 }, () => ({
-      x: Math.random() * 2000, y: Math.random() * 8000,
-      vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
-      r: Math.random() * 2 + 0.5, o: Math.random() * 0.4 + 0.1
-    }));
-    const resize = () => { c.width = window.innerWidth; c.height = document.body.scrollHeight; };
+    const particles: {x:number;y:number;vx:number;vy:number;r:number;o:number}[] = 
+      Array.from({ length: 35 }, () => ({
+        x: Math.random() * 2000, y: Math.random() * 8000,
+        vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
+        r: Math.random() * 2 + 0.5, o: Math.random() * 0.4 + 0.1
+      }));
+    const resize = () => {
+      if (!c) return;
+      c.width = window.innerWidth;
+      c.height = document.body.scrollHeight;
+    };
     resize();
     window.addEventListener("resize", resize);
     const draw = () => {
+      if (!ctx || !c) return;
       ctx.clearRect(0, 0, c.width, c.height);
       particles.forEach(p => {
         p.x += p.vx; p.y += p.vy;
-        if (p.x < 0) p.x = c.width; if (p.x > c.width) p.x = 0;
-        if (p.y < 0) p.y = c.height; if (p.y > c.height) p.y = 0;
+        if (p.x < 0) p.x = c.width;
+        if (p.x > c.width) p.x = 0;
+        if (p.y < 0) p.y = c.height;
+        if (p.y > c.height) p.y = 0;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(168,155,254,${p.o})`;
@@ -218,11 +227,22 @@ function AnimatedBg() {
       raf = requestAnimationFrame(draw);
     };
     draw();
-    return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", resize); };
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", resize);
+    };
   }, []);
-  return <canvas ref={canvasRef} style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 0 }} />;
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: "fixed", top: 0, left: 0,
+        width: "100%", height: "100%",
+        pointerEvents: "none", zIndex: 0
+      }}
+    />
+  );
 }
-
 // Scroll reveal hook
 function useReveal() {
   const ref = useRef(null);
