@@ -1,7 +1,6 @@
 "use client";
 // @ts-nocheck
 import { useState, useEffect, useRef } from "react";
-
 const DATA = {
   name: "Ayantika Pyne",
   initials: "AP",
