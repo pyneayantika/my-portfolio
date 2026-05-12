@@ -1,5 +1,4 @@
 // @ts-nocheck
-"use client";
 import { useState, useEffect, useRef } from "react";
 
 const DATA = {
@@ -180,6 +179,26 @@ const DATA = {
       featured: false,
       desc: "Hybrid RAG + Agentic AI agent built on Swiggy MCP infrastructure. Converts 'plan my evening' into multi-service orchestration across Dineout, Food, Instamart with human-in-loop execution.",
       stack: ["LangGraph", "Groq", "ChromaDB", "FastAPI", "MCP"],
+      links: []
+    },
+    {
+      title: "Insurance Intelligence – Agentic RAG for Gen Z & Millennials",
+      tag: "AI Product Build · V1 In Progress 🔨",
+      emoji: "🛡️",
+      featured: false,
+      building: true,
+      desc: "Building an Agentic RAG system that simplifies insurance discovery, comparison, and decision-making for Indian Gen Z and Millennials (18–35). Addresses the massive trust deficit and jargon overload that causes 72% of young Indians to delay or avoid insurance purchases entirely.",
+      problem: "Young Indians (18–35) are massively underinsured — not due to affordability but due to complexity, distrust, and information asymmetry. Existing portals (Policybazaar, Coverfox) optimise for transactions, not comprehension. Gen Z and Millennials want to understand before they buy.",
+      approach: [
+        "RAG pipeline ingesting policy documents, IRDAI guidelines, and claim settlement data — indexed via FAISS for fast semantic retrieval",
+        "Agentic query router — detects intent (compare, explain, recommend, claim-help)",
+        "Plain-language explainer: converts dense policy jargon into simple Q&A",
+        "Personalised recommendation engine based on life stage, income, and risk appetite",
+        "Claim simulation — 'what would actually be covered in this scenario?'",
+        "Human-in-loop: always surfaces a licensed advisor for final decision"
+      ],
+      targetUsers: ["Salaried professionals (22–32) buying first health/term policy", "Gig workers needing flexible short-tenure coverage", "Parents (28–38) planning child + family cover", "First-time investors comparing ULIP vs Term vs Mutual Fund"],
+      stack: ["LangGraph", "Groq", "FAISS", "FastAPI", "Next.js", "RAG", "Agentic AI", "Python"],
       links: []
     }
   ],
@@ -485,6 +504,81 @@ function PRDSection({ prd }) {
 function ProjectCard({ p, index }) {
   const [h, setH] = useState(false);
   const [open, setOpen] = useState(false);
+
+  if (p.building) {
+    return (
+      <Reveal delay={index * 0.08} style={{ gridColumn: "1 / -1" }}>
+        <div style={{
+          background: `linear-gradient(135deg, rgba(253,203,110,0.06), rgba(108,92,231,0.08))`,
+          border: `1px solid rgba(253,203,110,0.3)`,
+          borderRadius: 20, padding: 28, backdropFilter: "blur(16px)",
+          position: "relative", overflow: "hidden"
+        }}>
+          {/* Building badge */}
+          <div style={{ position: "absolute", top: 16, right: 16, display: "flex", alignItems: "center", gap: 6, fontSize: 10, padding: "5px 14px", borderRadius: 20, background: "rgba(253,203,110,0.15)", border: "1px solid rgba(253,203,110,0.3)", color: C.warning, fontWeight: 700 }}>
+            <span style={{ display: "inline-block", width: 6, height: 6, borderRadius: "50%", background: C.warning, animation: "pulse 1.5s infinite" }} />
+            BUILDING V1
+          </div>
+
+          <div style={{ display: "flex", gap: 14, alignItems: "flex-start", marginBottom: 16 }}>
+            <span style={{ fontSize: 38 }}>{p.emoji}</span>
+            <div>
+              <div style={{ fontSize: 19, fontWeight: 800, color: C.text, fontFamily: "'Playfair Display',serif" }}>{p.title}</div>
+              <div style={{ fontSize: 11, color: C.warning, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, marginTop: 3 }}>{p.tag}</div>
+            </div>
+          </div>
+
+          {/* Problem */}
+          <div style={{ fontSize: 13, padding: "12px 16px", borderRadius: 12, background: "rgba(253,121,168,0.07)", border: "1px solid rgba(253,121,168,0.15)", color: C.text, lineHeight: 1.6, marginBottom: 16 }}>
+            <span style={{ color: "#fd79a8", fontWeight: 700, fontSize: 11, textTransform: "uppercase", letterSpacing: 1 }}>Problem · </span>
+            {p.problem}
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px,1fr))", gap: 16, marginBottom: 16 }}>
+            {/* Approach */}
+            <div>
+              <div style={{ fontSize: 11, color: C.accentGlow, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>🔧 V1 Build Approach</div>
+              {p.approach.map((a, i) => (
+                <div key={i} style={{ display: "flex", gap: 8, marginBottom: 8, fontSize: 12, color: C.text, lineHeight: 1.5 }}>
+                  <span style={{ color: C.warning, flexShrink: 0, fontWeight: 700 }}>{i + 1}.</span>
+                  <span>{a}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Target Users */}
+            <div>
+              <div style={{ fontSize: 11, color: C.accentGlow, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>👥 Target Users</div>
+              {p.targetUsers.map((u, i) => (
+                <div key={i} style={{ display: "flex", gap: 8, marginBottom: 8, fontSize: 12, color: C.text, lineHeight: 1.5 }}>
+                  <span style={{ color: C.success, flexShrink: 0 }}>●</span>
+                  <span>{u}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Stack */}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+            {p.stack.map(s => (
+              <span key={s} style={{ fontSize: 11, padding: "4px 12px", borderRadius: 12, background: "rgba(253,203,110,0.1)", color: C.warning, fontWeight: 600, border: "1px solid rgba(253,203,110,0.2)" }}>{s}</span>
+            ))}
+          </div>
+
+          {/* Progress bar */}
+          <div style={{ marginTop: 20 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+              <span style={{ fontSize: 11, color: C.muted }}>Build Progress</span>
+              <span style={{ fontSize: 11, color: C.warning, fontWeight: 700 }}>V1 — 20%</span>
+            </div>
+            <div style={{ height: 4, borderRadius: 2, background: "rgba(255,255,255,0.08)" }}>
+              <div style={{ height: "100%", width: "20%", borderRadius: 2, background: `linear-gradient(90deg, ${C.warning}, ${C.accentAlt})`, transition: "width 1s ease" }} />
+            </div>
+          </div>
+        </div>
+      </Reveal>
+    );
+  }
 
   if (p.featured) {
     return (
