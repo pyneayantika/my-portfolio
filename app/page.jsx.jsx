@@ -1,6 +1,5 @@
 "use client";
-// @ts-nocheck
-import React, { useState, useEffect, useRef, ReactNode, CSSProperties } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const DATA = {
   name: "Ayantika Pyne",
@@ -242,14 +241,14 @@ const C = {
 };
 
 function AnimatedBg() {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const canvasRef = useRef(null);
   useEffect(() => {
-    const c = canvasRef.current as HTMLCanvasElement;
+    const c = canvasRef.current;
     if (!c) return;
-    const ctx = c.getContext("2d") as CanvasRenderingContext2D;
+    const ctx = c.getContext("2d");
     if (!ctx) return;
-    let raf: number;
-    const pts: {x:number;y:number;vx:number;vy:number;r:number;o:number}[] = Array.from({ length: 35 }, () => ({
+    let raf;
+    const pts = Array.from({ length: 35 }, () => ({
       x: Math.random() * 2000, y: Math.random() * 9000,
       vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
       r: Math.random() * 2 + 0.5, o: Math.random() * 0.4 + 0.1
@@ -286,8 +285,8 @@ function AnimatedBg() {
   return <canvas ref={canvasRef} style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 0 }} />;
 }
 
-function useReveal(): [React.RefObject<HTMLDivElement>, boolean] {
-  const ref = useRef<HTMLDivElement>(null);
+function useReveal() {
+  const ref = useRef(null);
   const [v, setV] = useState(false);
   useEffect(() => {
     const el = ref.current; if (!el) return;
@@ -297,12 +296,12 @@ function useReveal(): [React.RefObject<HTMLDivElement>, boolean] {
   return [ref, v];
 }
 
-function Reveal({ children, delay = 0, style = {} }: { children: ReactNode; delay?: number; style?: CSSProperties }) {
+function Reveal({ children, delay = 0, style = {} }) {
   const [ref, v] = useReveal();
   return <div ref={ref} style={{ opacity: v ? 1 : 0, transform: v ? "translateY(0)" : "translateY(28px)", transition: `all 0.7s cubic-bezier(.22,1,.36,1) ${delay}s`, ...style }}>{children}</div>;
 }
 
-function Glass({ children, style = {}, hover = true, onClick }: { children: ReactNode; style?: CSSProperties; hover?: boolean; onClick?: () => void }) {
+function Glass({ children, style = {}, hover = true, onClick }) {
   const [h, setH] = useState(false);
   return (
     <div onClick={onClick} onMouseEnter={() => setH(true)} onMouseLeave={() => setH(false)}
@@ -312,11 +311,11 @@ function Glass({ children, style = {}, hover = true, onClick }: { children: Reac
   );
 }
 
-function FloatingChar({ emoji, top, left, size = 32, delay = 0 }: { emoji: string; top: string; left: string; size?: number; delay?: number }) {
+function FloatingChar({ emoji, top, left, size = 32, delay = 0 }) {
   return <span style={{ position: "absolute", top, left, fontSize: size, opacity: 0.2, animation: `floaty 6s ease-in-out ${delay}s infinite alternate`, pointerEvents: "none", userSelect: "none", zIndex: 0 }}>{emoji}</span>;
 }
 
-function Splash({ onDone }: { onDone: () => void }) {
+function Splash({ onDone }) {
   const [phase, setPhase] = useState(0);
   useEffect(() => {
     const t1 = setTimeout(() => setPhase(1), 100);
@@ -334,7 +333,7 @@ function Splash({ onDone }: { onDone: () => void }) {
   );
 }
 
-function Nav({ active }: { active: string }) {
+function Nav({ active }) {
   const links = ["About", "Experience", "Projects", "Skills", "Education", "Contact"];
   return (
     <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "rgba(10,10,26,0.85)", backdropFilter: "blur(20px)", borderBottom: `1px solid ${C.glassBorder}`, display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 28px", fontFamily: "'DM Sans',sans-serif" }}>
@@ -352,7 +351,7 @@ function Nav({ active }: { active: string }) {
   );
 }
 
-function ExperienceCard({ item, index }: { item: { role: string; company: string; location: string; dates: string; emoji: string; bullets: string[] }; index: number }) {
+function ExperienceCard({ item, index }) {
   const [open, setOpen] = useState(index === 0);
   return (
     <Reveal delay={index * 0.08}>
@@ -381,7 +380,7 @@ function ExperienceCard({ item, index }: { item: { role: string; company: string
 }
 
 // PRD Deep-dive section inside featured project
-function PRDSection({ prd }: { prd: any }) {
+function PRDSection({ prd }) {
   const [tab, setTab] = useState("problem");
   const tabs = [
     { id: "problem", label: "🔍 Problem" },
@@ -506,7 +505,7 @@ function PRDSection({ prd }: { prd: any }) {
   );
 }
 
-function ProjectCard({ p, index }: { p: any; index: number }) {
+function ProjectCard({ p, index }) {
   const [h, setH] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -665,7 +664,7 @@ function ProjectCard({ p, index }: { p: any; index: number }) {
   );
 }
 
-function SectionHead({ title, subtitle, emoji }: { title: string; subtitle?: string; emoji: string }) {
+function SectionHead({ title, subtitle, emoji }) {
   return (
     <Reveal>
       <div style={{ marginBottom: 36, textAlign: "center" }}>
