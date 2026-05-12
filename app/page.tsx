@@ -1,6 +1,6 @@
 "use client";
 // @ts-nocheck
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, ReactNode, CSSProperties } from "react";
 
 const DATA = {
   name: "Ayantika Pyne",
@@ -297,12 +297,12 @@ function useReveal() {
   return [ref, v];
 }
 
-function Reveal({ children, delay = 0, style = {} }) {
+function Reveal({ children, delay = 0, style = {} }: { children: ReactNode; delay?: number; style?: CSSProperties }) {
   const [ref, v] = useReveal();
   return <div ref={ref} style={{ opacity: v ? 1 : 0, transform: v ? "translateY(0)" : "translateY(28px)", transition: `all 0.7s cubic-bezier(.22,1,.36,1) ${delay}s`, ...style }}>{children}</div>;
 }
 
-function Glass({ children, style = {}, hover = true, onClick }) {
+function Glass({ children, style = {}, hover = true, onClick }: { children: ReactNode; style?: CSSProperties; hover?: boolean; onClick?: () => void }) {
   const [h, setH] = useState(false);
   return (
     <div onClick={onClick} onMouseEnter={() => setH(true)} onMouseLeave={() => setH(false)}
@@ -312,11 +312,11 @@ function Glass({ children, style = {}, hover = true, onClick }) {
   );
 }
 
-function FloatingChar({ emoji, top, left, size = 32, delay = 0 }) {
+function FloatingChar({ emoji, top, left, size = 32, delay = 0 }: { emoji: string; top: string; left: string; size?: number; delay?: number }) {
   return <span style={{ position: "absolute", top, left, fontSize: size, opacity: 0.2, animation: `floaty 6s ease-in-out ${delay}s infinite alternate`, pointerEvents: "none", userSelect: "none", zIndex: 0 }}>{emoji}</span>;
 }
 
-function Splash({ onDone }) {
+function Splash({ onDone }: { onDone: () => void }) {
   const [phase, setPhase] = useState(0);
   useEffect(() => {
     const t1 = setTimeout(() => setPhase(1), 100);
@@ -334,7 +334,7 @@ function Splash({ onDone }) {
   );
 }
 
-function Nav({ active }) {
+function Nav({ active }: { active: string }) {
   const links = ["About", "Experience", "Projects", "Skills", "Education", "Contact"];
   return (
     <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: "rgba(10,10,26,0.85)", backdropFilter: "blur(20px)", borderBottom: `1px solid ${C.glassBorder}`, display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 28px", fontFamily: "'DM Sans',sans-serif" }}>
@@ -352,7 +352,7 @@ function Nav({ active }) {
   );
 }
 
-function ExperienceCard({ item, index }) {
+function ExperienceCard({ item, index }: { item: { role: string; company: string; location: string; dates: string; emoji: string; bullets: string[] }; index: number }) {
   const [open, setOpen] = useState(index === 0);
   return (
     <Reveal delay={index * 0.08}>
@@ -381,7 +381,7 @@ function ExperienceCard({ item, index }) {
 }
 
 // PRD Deep-dive section inside featured project
-function PRDSection({ prd }) {
+function PRDSection({ prd }: { prd: any }) {
   const [tab, setTab] = useState("problem");
   const tabs = [
     { id: "problem", label: "🔍 Problem" },
@@ -506,7 +506,7 @@ function PRDSection({ prd }) {
   );
 }
 
-function ProjectCard({ p, index }) {
+function ProjectCard({ p, index }: { p: any; index: number }) {
   const [h, setH] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -665,7 +665,7 @@ function ProjectCard({ p, index }) {
   );
 }
 
-function SectionHead({ title, subtitle, emoji }) {
+function SectionHead({ title, subtitle, emoji }: { title: string; subtitle?: string; emoji: string }) {
   return (
     <Reveal>
       <div style={{ marginBottom: 36, textAlign: "center" }}>
