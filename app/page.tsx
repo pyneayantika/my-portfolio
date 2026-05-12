@@ -1,6 +1,7 @@
 "use client";
 // @ts-nocheck
 import { useState, useEffect, useRef } from "react";
+
 const DATA = {
   name: "Ayantika Pyne",
   initials: "AP",
@@ -241,19 +242,23 @@ const C = {
 };
 
 function AnimatedBg() {
-  const canvasRef = useRef(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   useEffect(() => {
-    const c = canvasRef.current;
+    const c = canvasRef.current as HTMLCanvasElement;
     if (!c) return;
-    const ctx = c.getContext("2d");
+    const ctx = c.getContext("2d") as CanvasRenderingContext2D;
     if (!ctx) return;
-    let raf;
-    const pts = Array.from({ length: 35 }, () => ({
+    let raf: number;
+    const pts: {x:number;y:number;vx:number;vy:number;r:number;o:number}[] = Array.from({ length: 35 }, () => ({
       x: Math.random() * 2000, y: Math.random() * 9000,
       vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
       r: Math.random() * 2 + 0.5, o: Math.random() * 0.4 + 0.1
     }));
-    const resize = () => { c.width = window.innerWidth; c.height = document.body.scrollHeight; };
+    const resize = () => {
+      if (!canvasRef.current) return;
+      canvasRef.current.width = window.innerWidth;
+      canvasRef.current.height = document.body.scrollHeight;
+    };
     resize();
     window.addEventListener("resize", resize);
     const draw = () => {
